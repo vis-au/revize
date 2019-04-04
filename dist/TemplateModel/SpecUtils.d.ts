@@ -1,0 +1,31 @@
+import { ExtendedLayerSpec, NormalizedConcatSpec, NormalizedFacetSpec, NormalizedRepeatSpec } from 'vega-lite/build/src/spec';
+import { Datasets } from 'vega-lite/build/src/spec/toplevel';
+import { Composition } from './LayoutType';
+import { MarkEncoding } from './MarkEncoding';
+import { Template } from './Template';
+export declare function isAtomicSchema(schema: any): boolean;
+export declare function isOverlaySchema(schema: any): boolean;
+export declare function isRepeatSchema(schema: any): boolean;
+export declare function isConcatenateSchema(schema: any): boolean;
+export declare function isInlineFacetSchema(schema: any): boolean;
+export declare function isFacetSchema(schema: any): boolean;
+export declare function isCompositionSchema(schema: any): boolean;
+export declare function isPlotSchema(schema: any): boolean;
+export declare function getCompositionType(schema: any): Composition;
+export declare function getLayerAbstraction(schema: ExtendedLayerSpec): any;
+export declare function getRepeatAbstraction(schema: NormalizedRepeatSpec): {
+    spec: any;
+    repeat: any;
+};
+export declare function getFacetAbstraction(schema: NormalizedFacetSpec): {
+    spec: any;
+    facet: any;
+};
+export declare function getConcatAbstraction(schema: NormalizedConcatSpec): any;
+export declare function getMarkPropertiesAsMap(mark: any): Map<MarkEncoding, any>;
+export declare function getAtomicAbstraction(schema: any): any;
+export declare function setSingleViewProperties(schema: any, abstraction: any): any;
+export declare function getJoinedDatasetsOfChildNodes(template: Template): Datasets;
+export declare function getAllDatasetsInHierarchy(template: Template): import("vega-lite/build/src/util").Dict<import("vega-lite/build/src/data").InlineDataset>;
+export declare function getAbstraction(schema: any): any;
+export declare function setSchemaSize(schema: any, width: number, height: number): any;
