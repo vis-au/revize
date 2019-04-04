@@ -2,9 +2,7 @@
   "name": "toolkitmodel",
   "version": "1.0.0",
   "description": "Model classes for reusable vega-lite visualizations",
-  "main": "src/index.js",
-  "module": "src/index",
-  "types": "build/src/index.d.ts",
+  "types": "src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git@gitlab.au.dk:au629923/toolkitmodel.git"
