@@ -5,3 +5,4 @@ export { DatasetNode } from './Datasets/DatasetNode';
 export { InlineDatasetNode } from './Datasets/InlineDatasetNode';
 export { NamedDataSourceNode } from './Datasets/NamedDataSourceNode';
 export { URLDatasetNode } from './Datasets/URLDatasetNode';
+export { DataImporter } from './DataImporter';

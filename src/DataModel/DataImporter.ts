@@ -1,10 +1,10 @@
 import { csvParse } from 'd3';
 
-import { DatasetPreset } from '../../DataConfiguration/Toolbar/DatasetPreset';
 import { DatasetNode } from './Datasets/DatasetNode';
 import { URLDatasetNode } from './Datasets/URLDatasetNode';
 import { GraphNode } from './GraphNode';
 import { TransformNode } from './Transforms/TranformNode';
+import { UrlData } from 'vega-lite/build/src/data';
 
 export class DataImporter {
   public onNewDataset: (d?: DatasetNode) => void;
@@ -59,7 +59,7 @@ export class DataImporter {
     }
   }
 
-  private fetchCSV(preset: DatasetPreset, node: URLDatasetNode = new URLDatasetNode()) {
+  private fetchCSV(preset: UrlData, node: URLDatasetNode = new URLDatasetNode()) {
     const reader = new FileReader();
 
     reader.onloadend = (e: any) => {
@@ -81,7 +81,7 @@ export class DataImporter {
       .then(blob => reader.readAsText(blob));
   }
 
-  private fetchJSON(preset: DatasetPreset, node: URLDatasetNode = new URLDatasetNode()) {
+  private fetchJSON(preset: UrlData, node: URLDatasetNode = new URLDatasetNode()) {
     fetch(preset.url)
       .then(response => response.json())
       .then(dataArray => {
@@ -100,7 +100,7 @@ export class DataImporter {
       });
   }
 
-  public importPreset(preset: DatasetPreset, node?: URLDatasetNode) {
+  public importPreset(preset: UrlData, node?: URLDatasetNode) {
     if (this.datasets.get(preset.url) !== undefined) {
       return;
     }
@@ -114,7 +114,7 @@ export class DataImporter {
 
   public loadFieldsAndValuesToNode(node: GraphNode) {
     if (node instanceof URLDatasetNode) {
-      this.importPreset(node.getSchema() as DatasetPreset, node);
+      this.importPreset(node.getSchema(), node);
     } else if (node instanceof TransformNode) {
       const rootDatasetNode = node.getRootDatasetNode();
       if (rootDatasetNode !== null) {
