@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Model classes for ReVis and ReData",
   "types": "src/index.d.ts",
-  "main": "build/bundle.js",
+  "main": "dist/index",
   "repository": {
     "type": "git",
     "url": "git@gitlab.au.dk:au629923/toolkitmodel.git"
