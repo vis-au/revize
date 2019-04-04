@@ -1,7 +1,7 @@
 {
   "name": "toolkitmodel",
   "version": "1.0.0",
-  "description": "Model classes for reusable vega-lite visualizations",
+  "description": "Model classes for ReVis and ReData",
   "types": "src/index.d.ts",
   "repository": {
     "type": "git",
@@ -12,6 +12,6 @@
     "vega": "5.3.2",
     "vega-lite": "^3.0.2"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Marius Hogräfer <mhograefer@cs.au.dk",
+  "license": "BSD-3-Clause"
 }
