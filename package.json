@@ -1,0 +1,19 @@
+{
+  "name": "toolkitmodel",
+  "version": "1.0.0",
+  "description": "Model classes for reusable vega-lite visualizations",
+  "main": "src/index.js",
+  "module": "src/index",
+  "types": "build/src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.au.dk:au629923/toolkitmodel.git"
+  },
+  "dependencies": {
+    "d3-dsv": "^1.1.1",
+    "vega": "5.3.2",
+    "vega-lite": "^3.0.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
