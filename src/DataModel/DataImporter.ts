@@ -1,4 +1,4 @@
-import { csvParse } from 'd3';
+import { csvParse } from 'd3-dsv';
 
 import { DatasetNode } from './Datasets/DatasetNode';
 import { URLDatasetNode } from './Datasets/URLDatasetNode';
