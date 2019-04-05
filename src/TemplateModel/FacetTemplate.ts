@@ -1,5 +1,5 @@
 import { FacetFieldDef, FacetMapping } from 'vega-lite/build/src/spec/facet';
-import { Field } from 'vega-lite/build/src/channeldef';
+import { Field } from 'vega-lite/build/src/fielddef';
 
 import { CompositionTemplate } from './CompositionTemplate';
 import { Template } from './Template';

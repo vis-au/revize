@@ -1,4 +1,4 @@
-import { FieldDef, MarkPropFieldDef, ValueDef } from 'vega-lite/build/src/channeldef';
+import { FieldDef, MarkPropFieldDef, ValueDef } from 'vega-lite/build/src/fielddef';
 
 export type PositionEncoding = 'x' | 'y' | 'x2' | 'y2';
 export const positionEncodings: PositionEncoding[] = ['x', 'y', 'x2', 'y2'];
