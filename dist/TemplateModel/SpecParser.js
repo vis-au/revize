@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const spec_1 = require("vega-lite/build/src/spec");
-const channeldef_1 = require("vega-lite/build/src/channeldef");
 const data_1 = require("vega-lite/build/src/data");
 const concat_1 = require("vega-lite/build/src/spec/concat");
+const channeldef_1 = require("vega-lite/build/src/channeldef");
 const InlineDatasetNode_1 = require("../DataModel/Datasets/InlineDatasetNode");
 const NamedDataSourceNode_1 = require("../DataModel/Datasets/NamedDataSourceNode");
 const URLDatasetNode_1 = require("../DataModel/Datasets/URLDatasetNode");

@@ -1,10 +1,10 @@
 import { csvParse } from 'd3-dsv';
+import { UrlData } from 'vega-lite/build/src/data';
 
 import { DatasetNode } from './Datasets/DatasetNode';
 import { URLDatasetNode } from './Datasets/URLDatasetNode';
 import { GraphNode } from './GraphNode';
 import { TransformNode } from './Transforms/TranformNode';
-import { UrlData } from 'vega-lite/build/src/data';
 
 export class DataImporter {
   public onNewDataset: (d?: DatasetNode) => void;
@@ -22,7 +22,7 @@ export class DataImporter {
     if (url.includes('.json')) {
       name = url.match(/\/(\w+)\.json/)[1];
     } else if (url.includes('.csv')) {
-      name = url.match(/\/(\w+)\.csv/)[1];
+      name = url.match(/(\w+)\.csv/)[1];
     }
 
     return name;

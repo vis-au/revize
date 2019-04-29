@@ -7,7 +7,7 @@ export declare class TransformNode extends GraphNode {
     type: TransformName;
     transform: Transform;
     getRootDatasetNode(): DatasetNode;
-    getSchema(): any;
+    getSchema(): Data;
     setSchema(data: Data): void;
     getTransform(): Transform[];
 }

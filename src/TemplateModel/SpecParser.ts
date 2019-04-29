@@ -1,8 +1,8 @@
 import { isHConcatSpec, isVConcatSpec } from 'vega-lite/build/src/spec';
-import { isFieldDef, isRepeatRef } from 'vega-lite/build/src/fielddef';
 import { isInlineData, isNamedData, isUrlData } from 'vega-lite/build/src/data';
 import { isConcatSpec } from 'vega-lite/build/src/spec/concat';
 import { Transform } from 'vega-lite/build/src/transform';
+import { isFieldDef, isRepeatRef } from 'vega-lite/build/src/channeldef';
 
 import { DatasetNode } from '../DataModel/Datasets/DatasetNode';
 import { InlineDatasetNode } from '../DataModel/Datasets/InlineDatasetNode';

@@ -15,7 +15,7 @@ class DataImporter {
             name = url.match(/\/(\w+)\.json/)[1];
         }
         else if (url.includes('.csv')) {
-            name = url.match(/\/(\w+)\.csv/)[1];
+            name = url.match(/(\w+)\.csv/)[1];
         }
         return name;
     }
