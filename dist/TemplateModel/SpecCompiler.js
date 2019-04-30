@@ -222,9 +222,13 @@ class SpecCompiler {
         template.encodings.forEach((value, key) => {
             schema.encoding[key] = value;
         });
-        template.overwrittenEncodings.forEach((value, key) => {
-            schema.encoding[key] = value;
-        });
+        // do not overwrite encodings of repeated plots, as this would in turn use a mapping to a field
+        // instead of the repeated column/row
+        if (useOverwrittenEncodings) {
+            template.overwrittenEncodings.forEach((value, key) => {
+                schema.encoding[key] = value;
+            });
+        }
         return schema;
     }
     getCompositionSchema(template, inferData, useOverwrittenEncodings) {
