@@ -49,7 +49,7 @@ export class DataImporter {
 
   private convertCSVToDatasetNode(contents: any) {
     const csvContent = csvParse(contents);
-    const datasetNode = new URLDatasetNode();
+    const datasetNode = new InlineDatasetNode();
 
     datasetNode.fields = csvContent.columns;
     datasetNode.name = 'new Dataset';

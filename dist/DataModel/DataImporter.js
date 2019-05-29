@@ -35,7 +35,7 @@ class DataImporter {
     }
     convertCSVToDatasetNode(contents) {
         const csvContent = d3_dsv_1.csvParse(contents);
-        const datasetNode = new URLDatasetNode_1.URLDatasetNode();
+        const datasetNode = new InlineDatasetNode_1.InlineDatasetNode();
         datasetNode.fields = csvContent.columns;
         datasetNode.name = 'new Dataset';
         datasetNode.values = csvContent;
