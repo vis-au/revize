@@ -5,6 +5,7 @@ import { DatasetNode } from './Datasets/DatasetNode';
 import { URLDatasetNode } from './Datasets/URLDatasetNode';
 import { GraphNode } from './GraphNode';
 import { TransformNode } from './Transforms/TranformNode';
+import { InlineDatasetNode } from './Datasets/InlineDatasetNode';
 
 export class DataImporter {
   public onNewDataset: (d?: DatasetNode) => void;
@@ -115,6 +116,14 @@ export class DataImporter {
   public loadFieldsAndValuesToNode(node: GraphNode) {
     if (node instanceof URLDatasetNode) {
       this.importPreset(node.getSchema(), node);
+    } else if (node instanceof InlineDatasetNode) {
+      const values = (node.values as any);
+
+      if (values === undefined || values.length === 0) {
+        return;
+      }
+
+      node.fields = Object.keys(values[0]);
     } else if (node instanceof TransformNode) {
       const rootDatasetNode = node.getRootDatasetNode();
       if (rootDatasetNode !== null) {

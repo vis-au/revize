@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const d3_dsv_1 = require("d3-dsv");
 const URLDatasetNode_1 = require("./Datasets/URLDatasetNode");
 const TranformNode_1 = require("./Transforms/TranformNode");
+const InlineDatasetNode_1 = require("./Datasets/InlineDatasetNode");
 class DataImporter {
     constructor() {
         this.onNewDataset = null;
@@ -88,6 +89,13 @@ class DataImporter {
     loadFieldsAndValuesToNode(node) {
         if (node instanceof URLDatasetNode_1.URLDatasetNode) {
             this.importPreset(node.getSchema(), node);
+        }
+        else if (node instanceof InlineDatasetNode_1.InlineDatasetNode) {
+            const values = node.values;
+            if (values === undefined || values.length === 0) {
+                return;
+            }
+            node.fields = Object.keys(values[0]);
         }
         else if (node instanceof TranformNode_1.TransformNode) {
             const rootDatasetNode = node.getRootDatasetNode();
