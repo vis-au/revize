@@ -1,5 +1,4 @@
 import { Data } from 'vega-lite/build/src/data';
-import { Datasets } from 'vega-lite/build/src/spec/toplevel';
 import { Transform } from 'vega-lite/build/src/transform';
 
 import { TransformNode } from './Transforms/TranformNode';
@@ -51,8 +50,8 @@ export abstract class GraphNode {
   }
 
   public get name(): string {
-    if (this.myName === undefined) {
-      return this.id;
+    if (this.myName.length === 0) {
+      return "Unnamed Dataset";
     }
 
     return this.myName;
@@ -60,7 +59,7 @@ export abstract class GraphNode {
 
   public set name(name: string) {
     if (name === undefined) {
-      name = this.id;
+      name = '';
     }
 
     this.myName = name;

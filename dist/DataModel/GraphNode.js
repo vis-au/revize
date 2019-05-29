@@ -28,14 +28,14 @@ class GraphNode {
         return allParentNodes.reverse();
     }
     get name() {
-        if (this.myName === undefined) {
-            return this.id;
+        if (this.myName.length === 0) {
+            return "Unnamed Dataset";
         }
         return this.myName;
     }
     set name(name) {
         if (name === undefined) {
-            name = this.id;
+            name = '';
         }
         this.myName = name;
     }
