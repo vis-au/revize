@@ -60,17 +60,17 @@ export class DataImporter {
     }
   }
 
-  private fetchCSV(preset: UrlData, node: URLDatasetNode = new URLDatasetNode()) {
+  private fetchCSV(preset: UrlData, urlNode: URLDatasetNode = new URLDatasetNode()) {
     const reader = new FileReader();
+    const node = new InlineDatasetNode();
 
     reader.onloadend = (e: any) => {
       const dataArray = csvParse(e.srcElement.result);
       node.fields = Object.keys(dataArray[0]);
       node.values = dataArray;
       node.name = this.getFileNameFromURL(preset.url);
-      node.url = preset.url;
 
-      this.datasets.set(node.url, node);
+      this.datasets.set(urlNode.url, node);
 
       if (this.onNewDataset !== null) {
         this.onNewDataset(node);
@@ -82,7 +82,9 @@ export class DataImporter {
       .then(blob => reader.readAsText(blob));
   }
 
-  private fetchJSON(preset: UrlData, node: URLDatasetNode = new URLDatasetNode()) {
+  private fetchJSON(preset: UrlData, urlNode: URLDatasetNode = new URLDatasetNode()) {
+    const node = new InlineDatasetNode();
+
     fetch(preset.url)
       .then(response => response.json())
       .then(dataArray => {
@@ -90,10 +92,9 @@ export class DataImporter {
         node.values = dataArray;
 
         node.name = this.getFileNameFromURL(preset.url);
-        node.url = preset.url;
         node.format = preset.format;
 
-        this.datasets.set(node.url, node);
+        this.datasets.set(urlNode.url, node);
 
         if (this.onNewDataset !== null) {
           this.onNewDataset(node);
