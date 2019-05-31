@@ -5,8 +5,7 @@ class NamedDataSourceNode extends DatasetNode_1.DatasetNode {
     getSchema() {
         return {
             name: this.name,
-            format: this.format,
-            transform: this.getAllChildNodes().map(t => t.transform)
+            format: this.format
         };
     }
     setSchema(data) {

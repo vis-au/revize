@@ -6,8 +6,7 @@ class InlineDatasetNode extends DatasetNode_1.DatasetNode {
         return {
             name: this.name,
             values: this.values,
-            format: this.format,
-            transform: this.getAllChildNodes().map(t => t.transform)
+            format: this.format
         };
     }
     setSchema(data) {
