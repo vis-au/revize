@@ -8,6 +8,7 @@ const LayerTemplate_1 = require("./LayerTemplate");
 const PlotTemplate_1 = require("./PlotTemplate");
 const RepeatTemplate_1 = require("./RepeatTemplate");
 const SpecUtils_1 = require("./SpecUtils");
+const DataModel_1 = require("../DataModel");
 class SpecCompiler {
     getBasicSchema(template) {
         // check for empty templates, which should also generate valid specs
@@ -34,7 +35,13 @@ class SpecCompiler {
     setToplevelProperties(schema, template, includeData = true) {
         if (includeData && !!template.data) {
             schema.data = template.data;
-            schema.transform = template.dataTransformationNode.getAllChildNodes().map(node => node.transform);
+            const dataNode = template.dataTransformationNode;
+            if (dataNode instanceof DataModel_1.TransformNode) {
+                schema.transform = dataNode.getTransform();
+            }
+            else if (dataNode instanceof DataModel_1.DatasetNode) {
+                schema.transform = dataNode.getAllChildNodes().map(node => node.transform);
+            }
         }
         if (includeData && !!template.datasets) {
             schema.datasets = template.datasets;

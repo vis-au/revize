@@ -2,7 +2,6 @@ import { TopLevelSpec } from 'vega-lite';
 
 import { Data, isNamedData } from 'vega-lite/build/src/data';
 import { Datasets } from 'vega-lite/build/src/spec/toplevel';
-import { NamedDataSourceNode } from '../DataModel/Datasets/NamedDataSourceNode';
 import { CompositionTemplate } from './CompositionTemplate';
 import { ConcatTemplate } from './ConcatTemplate';
 import { FacetTemplate } from './FacetTemplate';
@@ -10,8 +9,9 @@ import { LayerTemplate } from './LayerTemplate';
 import { Composition } from './LayoutType';
 import { PlotTemplate } from './PlotTemplate';
 import { RepeatTemplate } from './RepeatTemplate';
-import { getAbstraction, getAllDatasetsInHierarchy, getJoinedDatasetsOfChildNodes } from './SpecUtils';
+import { getAbstraction, getAllDatasetsInHierarchy } from './SpecUtils';
 import { Template } from './Template';
+import { TransformNode, DatasetNode } from '../DataModel';
 
 
 export class SpecCompiler {
@@ -43,7 +43,14 @@ export class SpecCompiler {
   private setToplevelProperties(schema: any, template: Template, includeData: boolean = true) {
     if (includeData && !!template.data) {
       schema.data = template.data;
-      schema.transform = template.dataTransformationNode.getAllChildNodes().map(node => node.transform);
+
+      const dataNode = template.dataTransformationNode;
+
+      if (dataNode instanceof TransformNode) {
+        schema.transform = dataNode.getTransform();
+      } else if (dataNode instanceof DatasetNode) {
+        schema.transform = dataNode.getAllChildNodes().map(node => node.transform);
+      }
     }
     if (includeData && !!template.datasets) {
       schema.datasets = template.datasets;
