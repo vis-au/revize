@@ -43,6 +43,7 @@ export class SpecCompiler {
   private setToplevelProperties(schema: any, template: Template, includeData: boolean = true) {
     if (includeData && !!template.data) {
       schema.data = template.data;
+      schema.transform = template.dataTransformationNode.getAllChildNodes().map(node => node.transform);
     }
     if (includeData && !!template.datasets) {
       schema.datasets = template.datasets;
@@ -59,8 +60,6 @@ export class SpecCompiler {
     if (template.config !== undefined) {
       schema.config = template.config;
     }
-
-    schema.transform = template.transform;
 
     if (template instanceof CompositionTemplate) {
       schema = this.setCompositionProperties(schema, template);

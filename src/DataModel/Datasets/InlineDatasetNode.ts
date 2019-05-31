@@ -1,16 +1,14 @@
 import { DataFormat, InlineData } from 'vega-lite/build/src/data';
-import { Transform } from 'vega-lite/build/src/transform';
 import { DatasetNode } from './DatasetNode';
 
 export class InlineDatasetNode extends DatasetNode {
   public format?: DataFormat;
 
-  public getSchema(): InlineData & { transform: Transform[] } {
+  public getSchema(): InlineData {
     return {
       name: this.name,
       values: this.values,
-      format: this.format,
-      transform: this.getAllChildNodes().map(t => t.transform)
+      format: this.format
     };
   }
 
