@@ -51,7 +51,7 @@ export abstract class GraphNode {
 
   public get name(): string {
     if (this.myName.length === 0) {
-      return "Unnamed Dataset";
+      return this.id;
     }
 
     return this.myName;
@@ -59,7 +59,7 @@ export abstract class GraphNode {
 
   public set name(name: string) {
     if (name === undefined) {
-      name = '';
+      return;
     }
 
     this.myName = name;

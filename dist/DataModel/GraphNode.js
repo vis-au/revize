@@ -29,13 +29,13 @@ class GraphNode {
     }
     get name() {
         if (this.myName.length === 0) {
-            return "Unnamed Dataset";
+            return this.id;
         }
         return this.myName;
     }
     set name(name) {
         if (name === undefined) {
-            name = '';
+            return;
         }
         this.myName = name;
     }
