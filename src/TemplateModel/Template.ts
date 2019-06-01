@@ -76,6 +76,10 @@ export abstract class Template {
     return this.encodings.get(encoding);
   }
 
+  public deleteEncodedValue(encoding: MarkEncoding) {
+    this.encodings.delete(encoding);
+  }
+
   public set dataTransformationNode(transformNode: GraphNode) {
     this.dataNode = transformNode;
   }

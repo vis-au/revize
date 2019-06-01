@@ -44,6 +44,9 @@ class Template {
     getEncodedValue(encoding) {
         return this.encodings.get(encoding);
     }
+    deleteEncodedValue(encoding) {
+        this.encodings.delete(encoding);
+    }
     set dataTransformationNode(transformNode) {
         this.dataNode = transformNode;
     }

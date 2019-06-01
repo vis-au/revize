@@ -31,6 +31,7 @@ export declare abstract class Template {
     getHierarchyLevel(): number;
     setEncodedValue(encoding: MarkEncoding, value: any): void;
     getEncodedValue(encoding: MarkEncoding): any;
+    deleteEncodedValue(encoding: MarkEncoding): void;
     dataTransformationNode: GraphNode;
     readonly data: Data;
     readonly transform: Transform[];
