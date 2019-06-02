@@ -15,6 +15,7 @@ const LayerTemplate_1 = require("./LayerTemplate");
 const PlotTemplate_1 = require("./PlotTemplate");
 const RepeatTemplate_1 = require("./RepeatTemplate");
 const SpecUtils_1 = require("./SpecUtils");
+const DataModel_1 = require("../DataModel");
 class SpecParser {
     getEncodingsMapFromPlotSchema(schema) {
         const templateEncodings = new Map();
@@ -201,6 +202,11 @@ class SpecParser {
             transforms.forEach(t => {
                 const transformNode = new TranformNode_1.TransformNode();
                 transformNode.transform = t;
+                DataModel_1.transformNames.forEach(transformName => {
+                    if (transformName in t) {
+                        transformNode.type = transformName;
+                    }
+                });
                 transformNode.parent = workingNode;
                 workingNode.children.push(transformNode);
                 workingNode = transformNode;

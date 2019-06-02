@@ -19,6 +19,7 @@ import { PlotTemplate } from './PlotTemplate';
 import { RepeatTemplate } from './RepeatTemplate';
 import { getJoinedDatasetsOfChildNodes, getMarkPropertiesAsMap, isCompositionSchema, isConcatenateSchema, isFacetSchema, isOverlaySchema, isPlotSchema, isRepeatSchema } from './SpecUtils';
 import { Template } from './Template';
+import { transformNames } from '../DataModel';
 
 export class SpecParser {
 
@@ -244,6 +245,12 @@ export class SpecParser {
       transforms.forEach(t => {
         const transformNode = new TransformNode();
         transformNode.transform = t;
+
+        transformNames.forEach(transformName => {
+          if (transformName in t) {
+            transformNode.type = transformName;
+          }
+        });
 
         transformNode.parent = workingNode;
         workingNode.children.push(transformNode);
