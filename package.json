@@ -1,12 +1,12 @@
 {
-  "name": "toolkitmodel",
+  "name": "remodel-vis",
   "version": "1.0.0",
-  "description": "Model classes for ReVis and ReData",
+  "description": "A Library for In-Situ Modifications in Visualization Toolchaining with Vega-Lite",
   "types": "src/index.d.ts",
   "main": "dist/index",
   "repository": {
     "type": "git",
-    "url": "git@gitlab.au.dk:au629923/toolkitmodel.git"
+    "url": "git@github.com:vis-au/remodel.git"
   },
   "dependencies": {
     "@types/d3-dsv": "^1.0.36",
