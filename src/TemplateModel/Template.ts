@@ -1,8 +1,9 @@
 import { Config } from 'vega-lite';
 import { Data } from 'vega-lite/build/src/data';
 import { Transform } from 'vega-lite/build/src/transform';
-
 import { Datasets } from 'vega-lite/build/src/spec/toplevel';
+import { Projection } from 'vega-lite/build/src/projection';
+
 import { GraphNode } from '../DataModel/GraphNode';
 import { LayoutType } from './LayoutType';
 import { MarkEncoding } from './MarkEncoding';
@@ -19,6 +20,7 @@ export abstract class Template {
   public width: number;
   public height: number;
   public config: Config;
+  public projection: Projection;
 
   public encodings: Map<MarkEncoding, any>;
   public overwrittenEncodings: Map<MarkEncoding, any>

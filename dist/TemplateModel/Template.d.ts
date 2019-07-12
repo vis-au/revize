@@ -2,6 +2,7 @@ import { Config } from 'vega-lite';
 import { Data } from 'vega-lite/build/src/data';
 import { Transform } from 'vega-lite/build/src/transform';
 import { Datasets } from 'vega-lite/build/src/spec/toplevel';
+import { Projection } from 'vega-lite/build/src/projection';
 import { GraphNode } from '../DataModel/GraphNode';
 import { LayoutType } from './LayoutType';
 import { MarkEncoding } from './MarkEncoding';
@@ -18,6 +19,7 @@ export declare abstract class Template {
     width: number;
     height: number;
     config: Config;
+    projection: Projection;
     encodings: Map<MarkEncoding, any>;
     overwrittenEncodings: Map<MarkEncoding, any>;
     constructor(visualElements: Template[], layout: LayoutType, parent: Template);
