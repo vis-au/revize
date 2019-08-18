@@ -58,6 +58,9 @@ class SpecCompiler {
         if (template.config !== undefined) {
             schema.config = template.config;
         }
+        if (template.projection !== undefined) {
+            schema.projection = template.projection;
+        }
         if (template instanceof CompositionTemplate_1.CompositionTemplate) {
             schema = this.setCompositionProperties(schema, template);
         }

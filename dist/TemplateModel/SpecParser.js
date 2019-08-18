@@ -37,6 +37,7 @@ class SpecParser {
         template.height = schema.height;
         template.config = schema.config;
         template.datasets = schema.datasets;
+        template.projection = schema.projection;
         if (template instanceof CompositionTemplate_1.CompositionTemplate) {
             template.spacing = schema.spacing;
             template.columns = schema.columns;
