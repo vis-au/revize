@@ -1,2 +1,2 @@
-export * from './TemplateModel/';
+export * from './ViewModel';
 export * from './DataModel/';
