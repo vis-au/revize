@@ -10,9 +10,9 @@ const RepeatView_1 = require("./RepeatView");
 const SpecUtils_1 = require("./SpecUtils");
 const DataModel_1 = require("../DataModel");
 class SpecCompiler {
-    getBasicSchema(template) {
-        // check for empty templates, which should also generate valid specs
-        if (template && template.visualElements.length === 0 && template.parent === null) {
+    getBasicSchema(view) {
+        // check for empty views, which should also generate valid specs
+        if (view && view.visualElements.length === 0 && view.parent === null) {
             return {
                 $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
                 mark: 'area',
@@ -23,19 +23,19 @@ class SpecCompiler {
             $schema: 'https://vega.github.io/schema/vega-lite/v3.json'
         };
     }
-    setCompositionProperties(schema, template) {
-        if (template.columns !== undefined) {
-            schema.columns = template.columns;
+    setCompositionProperties(schema, view) {
+        if (view.columns !== undefined) {
+            schema.columns = view.columns;
         }
-        if (template.spacing !== undefined) {
-            schema.spacing = template.spacing;
+        if (view.spacing !== undefined) {
+            schema.spacing = view.spacing;
         }
         return schema;
     }
-    setToplevelProperties(schema, template, includeData = true) {
-        if (includeData && !!template.data) {
-            schema.data = template.data;
-            const dataNode = template.dataTransformationNode;
+    setToplevelProperties(schema, view, includeData = true) {
+        if (includeData && !!view.data) {
+            schema.data = view.data;
+            const dataNode = view.dataTransformationNode;
             if (dataNode instanceof DataModel_1.TransformNode) {
                 schema.transform = dataNode.getTransform();
             }
@@ -43,31 +43,31 @@ class SpecCompiler {
                 schema.transform = dataNode.getAllChildNodes().map(node => node.transform);
             }
         }
-        if (includeData && !!template.datasets) {
-            schema.datasets = template.datasets;
+        if (includeData && !!view.datasets) {
+            schema.datasets = view.datasets;
         }
-        if (template.bounds !== undefined) {
-            schema.bounds = template.bounds;
+        if (view.bounds !== undefined) {
+            schema.bounds = view.bounds;
         }
-        if (template.height !== undefined) {
-            schema.height = template.height;
+        if (view.height !== undefined) {
+            schema.height = view.height;
         }
-        if (template.width !== undefined) {
-            schema.width = template.width;
+        if (view.width !== undefined) {
+            schema.width = view.width;
         }
-        if (template.config !== undefined) {
-            schema.config = template.config;
+        if (view.config !== undefined) {
+            schema.config = view.config;
         }
-        if (template.projection !== undefined) {
-            schema.projection = template.projection;
+        if (view.projection !== undefined) {
+            schema.projection = view.projection;
         }
-        if (template instanceof CompositionView_1.CompositionView) {
-            schema = this.setCompositionProperties(schema, template);
+        if (view instanceof CompositionView_1.CompositionView) {
+            schema = this.setCompositionProperties(schema, view);
         }
         return schema;
     }
-    getRootTemplate(template) {
-        let workingNode = template;
+    getRootView(view) {
+        let workingNode = view;
         while (workingNode.parent !== null) {
             workingNode = workingNode.parent;
         }
@@ -83,23 +83,23 @@ class SpecCompiler {
         }
         return schema;
     }
-    applyRepeatLayout(template, schema) {
+    applyRepeatLayout(view, schema) {
         schema = this.abstractCompositions(schema, 'spec');
-        // parent must be repeat template to reach this branch
-        schema.repeat = template.parent.repeat;
+        // parent must be repeat view to reach this branch
+        schema.repeat = view.parent.repeat;
         return schema;
     }
-    applyFacetLayout(template, schema) {
-        const parentTemplate = template.parent;
-        if (parentTemplate.isInlineFacetted) {
+    applyFacetLayout(view, schema) {
+        const parentView = view.parent;
+        if (parentView.isInlineFacetted) {
             if (schema.encoding === undefined) {
                 schema.encoding = {};
             }
-            schema.encoding.facet = parentTemplate.facet;
+            schema.encoding.facet = parentView.facet;
         }
         else {
             schema = this.abstractCompositions(schema, 'spec');
-            schema.facet = parentTemplate.facet;
+            schema.facet = parentView.facet;
         }
         return schema;
     }
@@ -109,12 +109,12 @@ class SpecCompiler {
     applyOverlayLayout(schema) {
         return this.abstractCompositions(schema, 'layer');
     }
-    applyCompositionLayout(template, schema, composition) {
+    applyCompositionLayout(view, schema, composition) {
         if (composition === 'repeat') {
-            this.applyRepeatLayout(template, schema);
+            this.applyRepeatLayout(view, schema);
         }
         else if (composition === 'facet') {
-            this.applyFacetLayout(template, schema);
+            this.applyFacetLayout(view, schema);
         }
         else if (composition === 'concatenate') {
             this.applyConcatLayout(schema);
@@ -124,37 +124,37 @@ class SpecCompiler {
         }
         return schema;
     }
-    getDataInHierarchy(template) {
-        // data can be stored either in a child node or on the top level template, therefore find the
-        // top level, get its flat hierarchy and find a template with a dataset bound to it
-        let topLevelTemplate = template;
+    getDataInHierarchy(view) {
+        // data can be stored either in a child node or on the top level view, therefore find the
+        // top level, get its flat hierarchy and find a view with a dataset bound to it
+        let topLevelView = view;
         let data = null;
-        while (topLevelTemplate.parent !== null) {
-            if (topLevelTemplate.data !== undefined && topLevelTemplate.data !== null) {
-                data = topLevelTemplate.data;
+        while (topLevelView.parent !== null) {
+            if (topLevelView.data !== undefined && topLevelView.data !== null) {
+                data = topLevelView.data;
                 return data;
             }
-            topLevelTemplate = topLevelTemplate.parent;
+            topLevelView = topLevelView.parent;
         }
-        const flatHierarchy = topLevelTemplate.getFlatHierarchy();
-        const dataTemplate = flatHierarchy.find(t => {
+        const flatHierarchy = topLevelView.getFlatHierarchy();
+        const dataView = flatHierarchy.find(t => {
             return t.data !== null && t.data !== undefined;
         });
-        // could occur when template has no parent, no visualelements and no data (i.e. is "empty")
-        if (dataTemplate === undefined) {
+        // could occur when view has no parent, no visualelements and no data (i.e. is "empty")
+        if (dataView === undefined) {
             return {
                 values: [],
             };
         }
-        data = dataTemplate.data;
+        data = dataView.data;
         return data;
     }
-    getDatasetsInAncestry(template) {
-        // if the template references a namedDataset, also include that dataset.
-        if (template.data !== null && !data_1.isNamedData(template.data)) {
+    getDatasetsInAncestry(view) {
+        // if the view references a namedDataset, also include that dataset.
+        if (view.data !== null && !data_1.isNamedData(view.data)) {
             return null;
         }
-        let workingNode = template;
+        let workingNode = view;
         while (workingNode !== null && (workingNode.datasets === null || workingNode.datasets === undefined)) {
             workingNode = workingNode.parent;
         }
@@ -163,44 +163,44 @@ class SpecCompiler {
         }
         return workingNode.datasets;
     }
-    getRepeatSpec(parentTemplate) {
-        const template = parentTemplate.visualElements[0];
-        const layout = parentTemplate.layout;
+    getRepeatSpec(parentView) {
+        const view = parentView.visualElements[0];
+        const layout = parentView.layout;
         let schema = null;
-        schema = this.getVegaSpecification(template, false);
+        schema = this.getVegaSpecification(view, false);
         if (schema !== null) {
-            schema = this.applyCompositionLayout(template, schema, layout);
+            schema = this.applyCompositionLayout(view, schema, layout);
         }
         return schema;
     }
-    getFacetSpec(parentTemplate) {
-        const encodingTemplate = parentTemplate.visualElements[0];
+    getFacetSpec(parentView) {
+        const encodingView = parentView.visualElements[0];
         let schema = null;
-        // use the encodings from the child template, then apply facetting properties
-        schema = this.getVegaSpecification(encodingTemplate, false);
-        schema = this.applyCompositionLayout(encodingTemplate, schema, 'facet');
+        // use the encodings from the child view, then apply facetting properties
+        schema = this.getVegaSpecification(encodingView, false);
+        schema = this.applyCompositionLayout(encodingView, schema, 'facet');
         return schema;
     }
-    getMultiViewSpec(template, useOverwrittenEncodings) {
-        const templates = template.visualElements;
+    getMultiViewSpec(view, useOverwrittenEncodings) {
+        const views = view.visualElements;
         const schema = this.getBasicSchema();
-        const overwriteChildEncodings = !(template instanceof RepeatView_1.RepeatView) && useOverwrittenEncodings;
-        const individualSchemas = templates
+        const overwriteChildEncodings = !(view instanceof RepeatView_1.RepeatView) && useOverwrittenEncodings;
+        const individualSchemas = views
             .map(t => this.getVegaSpecification(t, false, overwriteChildEncodings));
         const individualViewAbstractions = individualSchemas
             .map(s => SpecUtils_1.getAbstraction(s));
-        if (template instanceof ConcatView_1.ConcatView) {
-            if (template.isVertical) {
+        if (view instanceof ConcatView_1.ConcatView) {
+            if (view.isVertical) {
                 schema.vconcat = individualViewAbstractions;
             }
             else {
                 schema.hconcat = individualViewAbstractions;
             }
         }
-        else if (template instanceof LayerView_1.LayerView) {
-            if (template.groupEncodings.size > 0) {
+        else if (view instanceof LayerView_1.LayerView) {
+            if (view.groupEncodings.size > 0) {
                 schema.encoding = {};
-                template.groupEncodings.forEach((value, key) => schema.encoding[key] = value);
+                view.groupEncodings.forEach((value, key) => schema.encoding[key] = value);
                 individualViewAbstractions.forEach(abstraction => {
                     delete abstraction.data;
                     delete abstraction.datasets;
@@ -210,13 +210,13 @@ class SpecCompiler {
         }
         return schema;
     }
-    getPlotSchema(template, inferData, useOverwrittenEncodings) {
+    getPlotSchema(view, inferData, useOverwrittenEncodings) {
         const schema = this.getBasicSchema();
-        let data = template.data;
-        let datasets = template.datasets;
+        let data = view.data;
+        let datasets = view.datasets;
         if (inferData) {
-            data = this.getDataInHierarchy(template);
-            datasets = this.getDatasetsInAncestry(template);
+            data = this.getDataInHierarchy(view);
+            datasets = this.getDatasetsInAncestry(view);
         }
         if (data !== undefined && data !== null) {
             schema.data = data;
@@ -224,46 +224,46 @@ class SpecCompiler {
         if (datasets !== undefined && datasets !== null) {
             schema.datasets = datasets;
         }
-        schema.mark = template.mark;
-        if (template.selection !== undefined) {
-            schema.selection = template.selection;
+        schema.mark = view.mark;
+        if (view.selection !== undefined) {
+            schema.selection = view.selection;
         }
         schema.encoding = {};
-        template.encodings.forEach((value, key) => {
+        view.encodings.forEach((value, key) => {
             schema.encoding[key] = value;
         });
         // do not overwrite encodings of repeated plots, as this would in turn use a mapping to a field
         // instead of the repeated column/row
         if (useOverwrittenEncodings) {
-            template.overwrittenEncodings.forEach((value, key) => {
+            view.overwrittenEncodings.forEach((value, key) => {
                 schema.encoding[key] = value;
             });
         }
         return schema;
     }
-    getCompositionSchema(template, inferData, useOverwrittenEncodings) {
+    getCompositionSchema(view, inferData, useOverwrittenEncodings) {
         let schema = null;
         let data = null;
         let datasets = null;
-        if (template.visualElements.length === 0) {
-            schema = this.getBasicSchema(template);
+        if (view.visualElements.length === 0) {
+            schema = this.getBasicSchema(view);
         }
-        else if (template instanceof RepeatView_1.RepeatView) {
-            schema = this.getRepeatSpec(template);
+        else if (view instanceof RepeatView_1.RepeatView) {
+            schema = this.getRepeatSpec(view);
         }
-        else if (template instanceof FacetView_1.FacetView) {
-            schema = this.getFacetSpec(template);
+        else if (view instanceof FacetView_1.FacetView) {
+            schema = this.getFacetSpec(view);
         }
         else {
-            schema = this.getMultiViewSpec(template, useOverwrittenEncodings);
+            schema = this.getMultiViewSpec(view, useOverwrittenEncodings);
         }
         if (inferData) {
-            data = this.getDataInHierarchy(template);
-            datasets = SpecUtils_1.getAllDatasetsInHierarchy(template);
+            data = this.getDataInHierarchy(view);
+            datasets = SpecUtils_1.getAllDatasetsInHierarchy(view);
         }
         else {
-            data = template.data;
-            datasets = template.datasets;
+            data = view.data;
+            datasets = view.datasets;
         }
         if (data !== undefined && data !== null) {
             schema.data = data;
@@ -271,23 +271,23 @@ class SpecCompiler {
         if (datasets !== undefined && datasets !== null) {
             schema.datasets = datasets;
         }
-        if (template.resolve !== undefined) {
-            schema.resolve = template.resolve;
+        if (view.resolve !== undefined) {
+            schema.resolve = view.resolve;
         }
         return schema;
     }
-    getVegaSpecification(template, inferProperties = false, useOverwrittenEncodings = false) {
+    getVegaSpecification(view, inferProperties = false, useOverwrittenEncodings = false) {
         let schema = null;
-        if (template instanceof PlotView_1.PlotView) {
-            schema = this.getPlotSchema(template, inferProperties, useOverwrittenEncodings);
+        if (view instanceof PlotView_1.PlotView) {
+            schema = this.getPlotSchema(view, inferProperties, useOverwrittenEncodings);
         }
-        else if (template instanceof CompositionView_1.CompositionView) {
-            schema = this.getCompositionSchema(template, inferProperties, useOverwrittenEncodings);
+        else if (view instanceof CompositionView_1.CompositionView) {
+            schema = this.getCompositionSchema(view, inferProperties, useOverwrittenEncodings);
         }
-        schema = this.setToplevelProperties(schema, template);
+        schema = this.setToplevelProperties(schema, view);
         if (inferProperties) {
-            const rootTemplate = this.getRootTemplate(template);
-            schema = this.setToplevelProperties(schema, rootTemplate, false);
+            const rootView = this.getRootView(view);
+            schema = this.setToplevelProperties(schema, rootView, false);
         }
         return schema;
     }

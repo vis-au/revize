@@ -5,14 +5,14 @@ class View {
         this.visualElements = visualElements;
         this.layout = layout;
         this.parent = parent;
-        this.id = `template${Math.round(Math.random() * 10000)}`;
+        this.id = `view${Math.round(Math.random() * 10000)}`;
         this.hierarchyLevel = -1;
         this.dataNode = null;
         this.encodings = new Map();
         this.overwrittenEncodings = new Map();
     }
     /**
-     * Returns the flattened hierarchy of templates succeeding this one.
+     * Returns the flattened hierarchy of views succeeding this one.
      */
     getFlatHierarchy() {
         const successors = [];
@@ -23,13 +23,13 @@ class View {
         return successors;
     }
     /**
-     * Returns the hierarchy level of this template, starting at 0.
+     * Returns the hierarchy level of this view, starting at 0.
      */
     getHierarchyLevel() {
         if (this.hierarchyLevel > -1) {
             return this.hierarchyLevel;
         }
-        // since the template may have visual elements from different leves, output the highest value
+        // since the view may have visual elements from different leves, output the highest value
         // between all sub-hierarchies
         if (this.visualElements.length === 0) {
             return 0;

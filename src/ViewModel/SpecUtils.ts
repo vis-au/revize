@@ -222,10 +222,10 @@ export function setSingleViewProperties(schema: any, abstraction: any) {
   return abstraction;
 };
 
-export function getJoinedDatasetsOfChildNodes(template: View): Datasets {
+export function getJoinedDatasetsOfChildNodes(view: View): Datasets {
   const joinedDatasets: Datasets = {};
 
-  const visualElements = template.getFlatHierarchy();
+  const visualElements = view.getFlatHierarchy();
   const childDatasets = visualElements
     .map(d => d.datasets)
     .filter(d => d !== undefined && d !== null);
@@ -240,17 +240,17 @@ export function getJoinedDatasetsOfChildNodes(template: View): Datasets {
   return joinedDatasets;
 };
 
-export function getAllDatasetsInHierarchy(template: View) {
-  const allDatasetsInHierarchy: Datasets = getJoinedDatasetsOfChildNodes(template);
-  let rootTemplate: View = template;
+export function getAllDatasetsInHierarchy(view: View) {
+  const allDatasetsInHierarchy: Datasets = getJoinedDatasetsOfChildNodes(view);
+  let rootView: View = view;
 
-  // only get datasets that are direct ancestors of the template, as siblings are not relevant
-  while (rootTemplate.parent !== null) {
-    rootTemplate = rootTemplate.parent;
+  // only get datasets that are direct ancestors of the view, as siblings are not relevant
+  while (rootView.parent !== null) {
+    rootView = rootView.parent;
 
-    if (rootTemplate.datasets) {
-      Object.keys(rootTemplate.datasets).forEach(key => {
-        allDatasetsInHierarchy[key] = rootTemplate.datasets[key];
+    if (rootView.datasets) {
+      Object.keys(rootView.datasets).forEach(key => {
+        allDatasetsInHierarchy[key] = rootView.datasets[key];
       });
     }
   }

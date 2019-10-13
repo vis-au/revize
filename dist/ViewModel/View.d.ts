@@ -24,11 +24,11 @@ export declare abstract class View {
     overwrittenEncodings: Map<MarkEncoding, any>;
     constructor(visualElements: View[], layout: LayoutType, parent: View);
     /**
-     * Returns the flattened hierarchy of templates succeeding this one.
+     * Returns the flattened hierarchy of views succeeding this one.
      */
     getFlatHierarchy(): View[];
     /**
-     * Returns the hierarchy level of this template, starting at 0.
+     * Returns the hierarchy level of this view, starting at 0.
      */
     getHierarchyLevel(): number;
     setEncodedValue(encoding: MarkEncoding, value: any): void;

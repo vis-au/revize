@@ -24,42 +24,42 @@ import { transformNames } from '../DataModel';
 export class SpecParser {
 
   private getEncodingsMapFromPlotSchema(schema: any) {
-    const templateEncodings = new Map<MarkEncoding, any>();
+    const viewEncodings = new Map<MarkEncoding, any>();
 
     // a mark can also be configured using the "global" encoding of layered views, in this case the
     // mark's encoding can be empty
     if (schema.encoding === undefined) {
-      return templateEncodings;
+      return viewEncodings;
     }
 
     const schemaEncodings = Object.keys(schema.encoding) as MarkEncoding[];
 
     schemaEncodings.forEach((encoding: MarkEncoding) => {
-      templateEncodings.set(encoding, schema.encoding[encoding]);
+      viewEncodings.set(encoding, schema.encoding[encoding]);
     });
 
-    return templateEncodings;
+    return viewEncodings;
   }
 
-  private setSingleViewProperties(schema: any, template: View) {
-    template.description = schema.description;
-    template.bounds = schema.bounds;
-    template.width = schema.width;
-    template.height = schema.height;
-    template.config = schema.config;
-    template.datasets = schema.datasets;
-    template.projection = schema.projection;
+  private setSingleViewProperties(schema: any, view: View) {
+    view.description = schema.description;
+    view.bounds = schema.bounds;
+    view.width = schema.width;
+    view.height = schema.height;
+    view.config = schema.config;
+    view.datasets = schema.datasets;
+    view.projection = schema.projection;
 
-    if (template instanceof CompositionView) {
-      template.spacing = schema.spacing;
-      template.columns = schema.columns;
+    if (view instanceof CompositionView) {
+      view.spacing = schema.spacing;
+      view.columns = schema.columns;
     }
   }
 
-  private getNonRepeatSubtrees(template: View) {
+  private getNonRepeatSubtrees(view: View) {
     const nonRepeatSubtrees: View[] = [];
 
-    template.visualElements.forEach(t => {
+    view.visualElements.forEach(t => {
       if (!(t instanceof RepeatView)) {
         nonRepeatSubtrees.push(t);
         nonRepeatSubtrees.push(...this.getNonRepeatSubtrees(t));
@@ -70,17 +70,17 @@ export class SpecParser {
   }
 
   /**
-   * In a repeat spec, the bindings inside the child templates can reference the repeated fields
-   * instead of fields from the data. In order to render such a template without its parent,
+   * In a repeat spec, the bindings inside the child views can reference the repeated fields
+   * instead of fields from the data. In order to render such a view without its parent,
    * modify this binding to the first entries in the repeated fields of the parent
    */
-  private removeRepeatFromChildTemplates(template: RepeatView) {
-    const nonRepeatSubTemplates = this.getNonRepeatSubtrees(template);
+  private removeRepeatFromChildViews(view: RepeatView) {
+    const nonRepeatSubViews = this.getNonRepeatSubtrees(view);
 
-    nonRepeatSubTemplates.forEach(childTemplate => {
-      const repeatedFields = template.repeat.column.concat(template.repeat.row);
+    nonRepeatSubViews.forEach(childView => {
+      const repeatedFields = view.repeat.column.concat(view.repeat.row);
 
-      childTemplate.encodings.forEach((value: any, key: MarkEncoding) => {
+      childView.encodings.forEach((value: any, key: MarkEncoding) => {
         if (isFieldDef<any>(value)) {
           if (isRepeatRef(value.field)) {
             const index = Math.floor(Math.random() * repeatedFields.length);
@@ -89,125 +89,125 @@ export class SpecParser {
               type: (value as any).type
             };
 
-            childTemplate.overwrittenEncodings.set(key, fieldRef)
+            childView.overwrittenEncodings.set(key, fieldRef)
           }
         }
       });
     });
   }
 
-  private getRepeatTemplate(schema: any) {
-    const template = new RepeatView([]);
-    template.repeat = schema.repeat;
-    const childTemplate = this.parse(schema.spec);
-    template.visualElements = [childTemplate];
-    this.removeRepeatFromChildTemplates(template);
+  private getRepeatView(schema: any) {
+    const view = new RepeatView([]);
+    view.repeat = schema.repeat;
+    const childView = this.parse(schema.spec);
+    view.visualElements = [childView];
+    this.removeRepeatFromChildViews(view);
 
-    return template;
+    return view;
   }
 
-  private getFacetTemplate(schema: any) {
-    const template = new FacetView([]);
+  private getFacetView(schema: any) {
+    const view = new FacetView([]);
     const visualElements: View[] = [];
 
     if (schema.facet !== undefined) {
-      template.facet = JSON.parse(JSON.stringify(schema.facet));
+      view.facet = JSON.parse(JSON.stringify(schema.facet));
       delete schema.facet;
       visualElements.push(this.parse(schema.spec));
     } else if (schema.encoding.facet !== undefined) {
-      template.isInlineFacetted = true;
-      template.facet = JSON.parse(JSON.stringify(schema.encoding.facet));
+      view.isInlineFacetted = true;
+      view.facet = JSON.parse(JSON.stringify(schema.encoding.facet));
       delete schema.encoding.facet;
       visualElements.push(this.parse(schema));
     }
 
-    template.visualElements = visualElements;
+    view.visualElements = visualElements;
 
-    return template;
+    return view;
   }
 
-  private getLayerTemplate(schema: any) {
-    const template = new LayerView([]);
+  private getLayerView(schema: any) {
+    const view = new LayerView([]);
 
     if (schema.encoding !== undefined) {
       const groupEncodings = Object.keys(schema.encoding);
       groupEncodings.forEach((encoding: MarkEncoding) => {
-        (template as LayerView).groupEncodings.set(encoding, schema.encoding[encoding]);
+        (view as LayerView).groupEncodings.set(encoding, schema.encoding[encoding]);
       });
     }
 
     schema.layer.forEach((layer: any) => {
-      template.visualElements.push(this.parse(layer));
+      view.visualElements.push(this.parse(layer));
     });
 
-    return template;
+    return view;
   }
 
-  private getConcatTemplate(schema: any) {
-    const template = new ConcatView([]);
+  private getConcatView(schema: any) {
+    const view = new ConcatView([]);
 
     if (isVConcatSpec(schema)) {
-      template.isVertical = true;
-      template.isWrappable = false;
+      view.isVertical = true;
+      view.isWrappable = false;
       schema.vconcat.forEach((layer: any) => {
-        template.visualElements.push(this.parse(layer));
+        view.visualElements.push(this.parse(layer));
       });
     } else if (isHConcatSpec(schema)) {
-      template.isVertical = false;
-      template.isWrappable = false;
+      view.isVertical = false;
+      view.isWrappable = false;
       schema.hconcat.forEach((layer: any) => {
-        template.visualElements.push(this.parse(layer));
+        view.visualElements.push(this.parse(layer));
       });
     } else if (isConcatSpec(schema)) {
-      template.isVertical = false;
-      template.isWrappable = true;
+      view.isVertical = false;
+      view.isWrappable = true;
       schema.concat.forEach((layer: any) => {
-        template.visualElements.push(this.parse(layer));
+        view.visualElements.push(this.parse(layer));
       });
     }
 
-    return template;
+    return view;
   }
 
-  private getCompositionTemplate(schema: any) {
-    let template: CompositionView = null;
+  private getCompositionView(schema: any) {
+    let view: CompositionView = null;
 
     if (isRepeatSchema(schema)) {
-      template = this.getRepeatTemplate(schema);
+      view = this.getRepeatView(schema);
     } else if (isOverlaySchema(schema)) {
-      template = this.getLayerTemplate(schema);
+      view = this.getLayerView(schema);
     } else if (isFacetSchema(schema)) {
-      template = this.getFacetTemplate(schema);
+      view = this.getFacetView(schema);
     } else if (isConcatenateSchema(schema)) {
-      template = this.getConcatTemplate(schema);
+      view = this.getConcatView(schema);
     }
 
     const encodings = this.getEncodingsMapFromPlotSchema(schema);
-    template.encodings = encodings;
+    view.encodings = encodings;
 
-    template.resolve = schema.resolve;
-    template.visualElements.forEach(t => t.parent = template);
+    view.resolve = schema.resolve;
+    view.visualElements.forEach(t => t.parent = view);
 
-    template.encodings.forEach((value, key) => {
-      template.visualElements.forEach(t => {
+    view.encodings.forEach((value, key) => {
+      view.visualElements.forEach(t => {
         t.overwrittenEncodings.set(key, value);
       });
     })
 
-    return template;
+    return view;
   }
 
-  private getPlotTemplate(schema: any) {
-    const plotTemplate = new PlotView(null);
-    plotTemplate.mark = schema.mark;
+  private getPlotView(schema: any) {
+    const plotView = new PlotView(null);
+    plotView.mark = schema.mark;
 
     const encodings = this.getEncodingsMapFromPlotSchema(schema);
     const properties = getMarkPropertiesAsMap(schema.mark);
 
-    plotTemplate.encodings = encodings;
-    plotTemplate.staticMarkProperties = properties;
+    plotView.encodings = encodings;
+    plotView.staticMarkProperties = properties;
 
-    return plotTemplate;
+    return plotView;
   }
 
   private getRootDatasetNode(schema: any): DatasetNode {
@@ -274,25 +274,25 @@ export class SpecParser {
   }
 
   public parse(schema: any) {
-    let template: View = null;
+    let view: View = null;
 
     if (isCompositionSchema(schema)) {
-      template = this.getCompositionTemplate(schema);
+      view = this.getCompositionView(schema);
     } else if (isPlotSchema(schema)) {
-      template = this.getPlotTemplate(schema);
+      view = this.getPlotView(schema);
     }
 
-    this.setSingleViewProperties(schema, template);
+    this.setSingleViewProperties(schema, view);
 
     const dataTransformation = this.parseDataTransformation(schema);
-    template.dataTransformationNode = dataTransformation;
+    view.dataTransformationNode = dataTransformation;
 
-    const datasets = getJoinedDatasetsOfChildNodes(template);
+    const datasets = getJoinedDatasetsOfChildNodes(view);
 
-    if (template instanceof PlotView) {
-      template.selection = schema.selection;
+    if (view instanceof PlotView) {
+      view.selection = schema.selection;
     }
 
-    return template;
+    return view;
   }
 }

@@ -4,17 +4,17 @@ export declare class SpecParser {
     private setSingleViewProperties;
     private getNonRepeatSubtrees;
     /**
-     * In a repeat spec, the bindings inside the child templates can reference the repeated fields
-     * instead of fields from the data. In order to render such a template without its parent,
+     * In a repeat spec, the bindings inside the child views can reference the repeated fields
+     * instead of fields from the data. In order to render such a view without its parent,
      * modify this binding to the first entries in the repeated fields of the parent
      */
-    private removeRepeatFromChildTemplates;
-    private getRepeatTemplate;
-    private getFacetTemplate;
-    private getLayerTemplate;
-    private getConcatTemplate;
-    private getCompositionTemplate;
-    private getPlotTemplate;
+    private removeRepeatFromChildViews;
+    private getRepeatView;
+    private getFacetView;
+    private getLayerView;
+    private getConcatView;
+    private getCompositionView;
+    private getPlotView;
     private getRootDatasetNode;
     private getLeafTransformNode;
     private parseDataTransformation;

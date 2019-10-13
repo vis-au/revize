@@ -1,9 +1,9 @@
 import { View } from './View';
 export declare class SpecCompiler {
-    getBasicSchema(template?: View): any;
+    getBasicSchema(view?: View): any;
     private setCompositionProperties;
     private setToplevelProperties;
-    private getRootTemplate;
+    private getRootView;
     private abstractCompositions;
     private applyRepeatLayout;
     private applyFacetLayout;
@@ -17,5 +17,5 @@ export declare class SpecCompiler {
     private getMultiViewSpec;
     private getPlotSchema;
     private getCompositionSchema;
-    getVegaSpecification(template: View, inferProperties?: boolean, useOverwrittenEncodings?: boolean): any;
+    getVegaSpecification(view: View, inferProperties?: boolean, useOverwrittenEncodings?: boolean): any;
 }
