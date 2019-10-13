@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Overview
 
 ReVize is a library for visualization toolchaining with Vega-Lite.
@@ -11,3 +12,7 @@ Here we list the visualization and data analysis tools which have been enabled f
 * [ColorBrewer](https://vis-au.github.io/colorbrewer)
 * [KNIME](TBA)
 * [VisFlow](TBA)
+=======
+# revize
+a library for visualization toolchaining with Vega-Lite
+>>>>>>> 7bb471a3ffcaa72f6dcba288bc24fad0edb3b593
