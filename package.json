@@ -1,12 +1,12 @@
 {
-  "name": "remodel-vis",
-  "version": "1.0.3",
+  "name": "revize",
+  "version": "1.0.0",
   "description": "A Library for In-Situ Modifications in Visualization Toolchains with Vega-Lite",
   "types": "src/index.d.ts",
   "main": "dist/index",
   "repository": {
     "type": "git",
-    "url": "git@github.com:vis-au/remodel.git"
+    "url": "git@github.com:vis-au/revize.git"
   },
   "dependencies": {
     "@types/d3-dsv": "^1.0.36",
