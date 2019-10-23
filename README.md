@@ -9,5 +9,5 @@ Thus, ReVize enables visualization toolchaining by using multiple visualization 
 Here we list the visualization and data analysis tools which have been enabled for visualization toolchaining with ReVize:
 
 * [ColorBrewer](https://vis-au.github.io/colorbrewer)
-* [KNIME](TBA)
-* [VisFlow](TBA)
+* [KNIME](https://vis-au.github.io/toolchaining/knime)
+* [VisFlow](https://github.com/vis-au/visflow)
