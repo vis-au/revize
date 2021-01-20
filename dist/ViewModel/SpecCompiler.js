@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpecCompiler = void 0;
 const data_1 = require("vega-lite/build/src/data");
 const CompositionView_1 = require("./CompositionView");
 const ConcatView_1 = require("./ConcatView");

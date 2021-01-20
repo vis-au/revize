@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.View = void 0;
 class View {
     constructor(visualElements, layout, parent) {
         this.visualElements = visualElements;

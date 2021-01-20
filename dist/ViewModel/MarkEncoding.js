@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.markEncodingGroups = exports.markEncodings = exports.facetChannelEncodings = exports.loDChannelEncodings = exports.orderChannelEncodings = exports.keyChannelEncodings = exports.hyperLinkChannelEncodings = exports.textTooltipChannelEncodings = exports.markPropertiesChannelEncodings = exports.geographicPositionEncodings = exports.positionEncodings = void 0;
 exports.positionEncodings = ['x', 'y', 'x2', 'y2'];
 exports.geographicPositionEncodings = ['longitude', 'latitude'];
 exports.markPropertiesChannelEncodings = [

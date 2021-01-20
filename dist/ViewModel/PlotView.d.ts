@@ -7,5 +7,6 @@ export declare class PlotView extends View {
     staticMarkProperties?: Map<MarkEncoding, any>;
     mark: MarkDef | Mark;
     constructor(parent?: View);
-    type: Mark;
+    get type(): Mark;
+    set type(type: Mark);
 }

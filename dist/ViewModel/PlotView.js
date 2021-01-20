@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PlotView = void 0;
 const mark_1 = require("vega-lite/build/src/mark");
 const View_1 = require("./View");
 class PlotView extends View_1.View {

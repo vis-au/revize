@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.setSchemaSize = exports.getAbstraction = exports.getAllDatasetsInHierarchy = exports.getJoinedDatasetsOfChildNodes = exports.setSingleViewProperties = exports.getAtomicAbstraction = exports.getMarkPropertiesAsMap = exports.getConcatAbstraction = exports.getFacetAbstraction = exports.getRepeatAbstraction = exports.getLayerAbstraction = exports.getCompositionType = exports.isPlotSchema = exports.isCompositionSchema = exports.isFacetSchema = exports.isInlineFacetSchema = exports.isConcatenateSchema = exports.isRepeatSchema = exports.isOverlaySchema = exports.isAtomicSchema = void 0;
 const spec_1 = require("vega-lite/build/src/spec");
 const concat_1 = require("vega-lite/build/src/spec/concat");
 const MarkEncoding_1 = require("./MarkEncoding");

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConcatView = void 0;
 const CompositionView_1 = require("./CompositionView");
 class ConcatView extends CompositionView_1.CompositionView {
     constructor(visualElements, parent = null) {

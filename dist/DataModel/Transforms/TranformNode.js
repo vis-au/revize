@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TransformNode = void 0;
 const DatasetNode_1 = require("../Datasets/DatasetNode");
 const GraphNode_1 = require("../GraphNode");
 class TransformNode extends GraphNode_1.GraphNode {

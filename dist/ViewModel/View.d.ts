@@ -34,7 +34,8 @@ export declare abstract class View {
     setEncodedValue(encoding: MarkEncoding, value: any): void;
     getEncodedValue(encoding: MarkEncoding): any;
     deleteEncodedValue(encoding: MarkEncoding): void;
-    dataTransformationNode: GraphNode;
-    readonly data: Data;
-    readonly transform: Transform[];
+    set dataTransformationNode(transformNode: GraphNode);
+    get dataTransformationNode(): GraphNode;
+    get data(): Data;
+    get transform(): Transform[];
 }

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.URLDatasetNode = void 0;
 const DatasetNode_1 = require("./DatasetNode");
 class URLDatasetNode extends DatasetNode_1.DatasetNode {
     getSchema() {

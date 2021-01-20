@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.GraphNode = void 0;
 class GraphNode {
     constructor() {
         this.id = `node${Math.floor(Math.random() * 1000000)}`;

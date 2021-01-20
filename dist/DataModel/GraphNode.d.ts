@@ -12,5 +12,6 @@ export declare abstract class GraphNode {
     abstract getTransform(): Transform[];
     getAllChildNodes(): TransformNode[];
     getFullAncestry(): GraphNode[];
-    name: string;
+    get name(): string;
+    set name(name: string);
 }

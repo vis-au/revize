@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpecParser = void 0;
 const spec_1 = require("vega-lite/build/src/spec");
 const data_1 = require("vega-lite/build/src/data");
 const concat_1 = require("vega-lite/build/src/spec/concat");

@@ -26,6 +26,6 @@ export declare function getMarkPropertiesAsMap(mark: any): Map<MarkEncoding, any
 export declare function getAtomicAbstraction(schema: any): any;
 export declare function setSingleViewProperties(schema: any, abstraction: any): any;
 export declare function getJoinedDatasetsOfChildNodes(view: View): Datasets;
-export declare function getAllDatasetsInHierarchy(view: View): import("vega-lite/build/src/util").Dict<import("vega-lite/build/src/data").InlineDataset>;
+export declare function getAllDatasetsInHierarchy(view: View): Datasets;
 export declare function getAbstraction(schema: any): any;
 export declare function setSchemaSize(schema: any, width: number, height: number): any;
