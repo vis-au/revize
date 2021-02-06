@@ -24,7 +24,8 @@
     "vega-lite": "^3.2.1"
   },
   "scripts": {
-    "build": "rm -rf dist/ && tsc && rollup -c"
+    "build": "rm -rf dist/ && tsc && rollup -c",
+    "bundle": "rm -rf ./build/* && tsc && npx rollup -c --file ./build/bundle.js --format es"
   },
   "author": "Marius Hogräfer <mhograefer@cs.au.dk>",
   "license": "BSD-3-Clause"
