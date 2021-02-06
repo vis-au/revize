@@ -1,23 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.broadcastNewVersion = exports.unsubscribeFromRemoteChanges = exports.subscribeToRemoteChanges = exports.onExternallyUpdatedSpec = exports.connect = void 0;
+exports.broadcastNewVersion = exports.unsubscribeFromRemoteChanges = exports.subscribeToRemoteChanges = exports.previousInQueue = exports.nextInQueue = exports.connect = void 0;
 const io = require("socket.io-client");
 const subscribers = [];
-let socket = io();
+let socket = null;
+let id = -1;
 function connect(url = "http://localhost", port = 5000, namespace = "") {
     socket = io(`${url}:${port}/${namespace}`);
     socket.on('broadcast_spec', function (msg) {
-        onExternallyUpdatedSpec();
+        onExternallyUpdatedSpec(msg);
         console.log(msg);
     });
-    socket.emit("register", {});
+    socket.on("send_spec", function (msg) {
+        if (msg.target !== id) {
+            return;
+        }
+        onExternallyUpdatedSpec(msg);
+        console.log(msg);
+    });
+    id = Math.random();
+    socket.emit("register", { "id": id });
 }
 exports.connect = connect;
-function onExternallyUpdatedSpec() {
-    subscribers.forEach((callback) => callback());
+function onExternallyUpdatedSpec(message) {
+    subscribers.forEach((callback) => callback(message.spec, message.version));
 }
-exports.onExternallyUpdatedSpec = onExternallyUpdatedSpec;
 ;
+function nextInQueue(spec, version) {
+    socket.emit("get_next", { spec, version, source: id });
+}
+exports.nextInQueue = nextInQueue;
+;
+function previousInQueue(spec, version) {
+    socket.emit("get_previous", { spec, version, source: id });
+}
+exports.previousInQueue = previousInQueue;
 function subscribeToRemoteChanges(callback) {
     subscribers.push(callback);
 }
@@ -30,7 +47,7 @@ function unsubscribeFromRemoteChanges(callback) {
     }
 }
 exports.unsubscribeFromRemoteChanges = unsubscribeFromRemoteChanges;
-function broadcastNewVersion(spec) {
-    socket.emit("update_spec", { spec });
+function broadcastNewVersion(spec, version) {
+    socket.emit("update_spec", { spec, version });
 }
 exports.broadcastNewVersion = broadcastNewVersion;

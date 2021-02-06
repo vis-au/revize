@@ -1,24 +1,43 @@
 import * as io from 'socket.io-client';
 
-export type UpdateCallback = () => void;
+export type UpdateCallback = (spec: any, version: number) => void;
 
 const subscribers: UpdateCallback[] = [];
-let socket = io();
+let socket: any = null;
+let id: number = -1;
 
 export function connect(url: string="http://localhost", port: number=5000, namespace: string="") {
   socket = io(`${url}:${port}/${namespace}`);
 
   socket.on('broadcast_spec', function(msg: any) {
-    onExternallyUpdatedSpec();
+    onExternallyUpdatedSpec(msg);
     console.log(msg)
   });
 
-  socket.emit("register", {});
+  socket.on("send_spec", function(msg: any) {
+    if (msg.target !== id) {
+      return;
+    }
+
+    onExternallyUpdatedSpec(msg);
+    console.log(msg);
+  })
+
+  id = Math.random();
+  socket.emit("register", {"id": id});
 }
 
-export function onExternallyUpdatedSpec() {
-  subscribers.forEach((callback: UpdateCallback) => callback());
+function onExternallyUpdatedSpec(message: {spec: any, version: number}) {
+  subscribers.forEach((callback: UpdateCallback) => callback(message.spec, message.version));
 };
+
+export function nextInQueue(spec: any, version: any) {
+  socket.emit("get_next", { spec, version, source: id });
+};
+
+export function previousInQueue(spec: any, version: any) {
+  socket.emit("get_previous", { spec, version, source: id });
+}
 
 export function subscribeToRemoteChanges(callback: UpdateCallback) {
   subscribers.push(callback);
@@ -32,6 +51,6 @@ export function unsubscribeFromRemoteChanges(callback: UpdateCallback) {
   }
 }
 
-export function broadcastNewVersion(spec: any) {
-  socket.emit("update_spec", { spec });
+export function broadcastNewVersion(spec: any, version: any) {
+  socket.emit("update_spec", { spec, version });
 }
