@@ -37,7 +37,7 @@ export function nextInQueue(spec: any, version: any) {
 
 export function previousInQueue(spec: any, version: any) {
   socket.emit("get_previous", { spec, version, source: id });
-}
+};
 
 export function subscribeToRemoteChanges(callback: UpdateCallback) {
   subscribers.push(callback);
@@ -49,8 +49,12 @@ export function unsubscribeFromRemoteChanges(callback: UpdateCallback) {
   if (indexInSubscribers > -1) {
     subscribers.splice(indexInSubscribers, 1);
   }
-}
+};
 
 export function broadcastNewVersion(spec: any, version: any) {
   socket.emit("update_spec", { spec, version });
-}
+};
+
+export function sendNewVersion(spec: any, version: any) {
+  socket.emit("send_spec", { spec, version });
+};

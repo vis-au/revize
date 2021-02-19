@@ -17,7 +17,7 @@ export function disallowedImports() {
 export default {
   input: 'dist/index.js',
   output: {
-    file: 'build/remodel.js',
+    file: 'build/bundle.js',
     format: 'umd',
     sourcemap: true,
     name: 'vl'

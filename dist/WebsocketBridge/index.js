@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.broadcastNewVersion = exports.unsubscribeFromRemoteChanges = exports.subscribeToRemoteChanges = exports.previousInQueue = exports.nextInQueue = exports.connect = void 0;
+exports.sendNewVersion = exports.broadcastNewVersion = exports.unsubscribeFromRemoteChanges = exports.subscribeToRemoteChanges = exports.previousInQueue = exports.nextInQueue = exports.connect = void 0;
 const io = require("socket.io-client");
 const subscribers = [];
 let socket = null;
@@ -35,6 +35,7 @@ function previousInQueue(spec, version) {
     socket.emit("get_previous", { spec, version, source: id });
 }
 exports.previousInQueue = previousInQueue;
+;
 function subscribeToRemoteChanges(callback) {
     subscribers.push(callback);
 }
@@ -47,7 +48,14 @@ function unsubscribeFromRemoteChanges(callback) {
     }
 }
 exports.unsubscribeFromRemoteChanges = unsubscribeFromRemoteChanges;
+;
 function broadcastNewVersion(spec, version) {
     socket.emit("update_spec", { spec, version });
 }
 exports.broadcastNewVersion = broadcastNewVersion;
+;
+function sendNewVersion(spec, version) {
+    socket.emit("send_spec", { spec, version });
+}
+exports.sendNewVersion = sendNewVersion;
+;
