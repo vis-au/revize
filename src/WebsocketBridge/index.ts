@@ -11,7 +11,12 @@ export function connect(url: string="http://localhost", port: number=5000, names
 
   socket.on('broadcast_spec', function(msg: any) {
     onExternallyUpdatedSpec(msg);
-    console.log(msg)
+    console.log("received new broadcasted spec", msg);
+  });
+
+  socket.on("set_id", function(msg: any) {
+    id = msg.id;
+    console.log("received new id", id);
   });
 
   socket.on("send_spec", function(msg: any) {
@@ -20,8 +25,12 @@ export function connect(url: string="http://localhost", port: number=5000, names
     }
 
     onExternallyUpdatedSpec(msg);
-    console.log(msg);
-  })
+    console.log("received new spec", msg);
+  });
+
+  socket.on("error", function(msg: any) {
+    console.error(msg.message);
+  });
 
   id = Math.random();
   socket.emit("register", {"id": id});
@@ -29,14 +38,6 @@ export function connect(url: string="http://localhost", port: number=5000, names
 
 function onExternallyUpdatedSpec(message: {spec: any, version: number}) {
   subscribers.forEach((callback: UpdateCallback) => callback(message.spec, message.version));
-};
-
-export function nextInQueue(spec: any, version: any) {
-  socket.emit("get_next", { spec, version, source: id });
-};
-
-export function previousInQueue(spec: any, version: any) {
-  socket.emit("get_previous", { spec, version, source: id });
 };
 
 export function subscribeToRemoteChanges(callback: UpdateCallback) {
